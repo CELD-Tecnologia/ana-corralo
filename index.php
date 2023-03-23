@@ -1,5 +1,5 @@
 <?php
-var_dumo("teste");
+echo "Site em manutenção...";
 die();
 @header("Cache-Control: no-cache, must-revalidate");  
 @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -114,6 +114,7 @@ if ( isset( $_GET['route'] ) )
     }
 }
 
+/*
 function __autoload($class)
 {
     $classFile = CLASSDIR . ucfirst( $class ) . '.class.php';
@@ -135,6 +136,7 @@ function __autoload($class)
          //@header( 'Location:' . HTTPURL . '404.php' );
     }
 }
+*/
 
 /* end file */
 ?>
