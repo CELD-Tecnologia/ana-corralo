@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>[config_site_title] - [config_site_description]</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />     
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <meta http-equiv="Cache-control" content="public" />
+		<link href="images/layout/faveicon.ico" rel="icon" type="image/x-icon" />
+        <meta name="description" content="[config_site_description]" />
+        <meta name="keywords" content="[config_site_keywords]" />
+        <meta name="author" content="[config_site_title]" />
+        <meta name="robots" content="all" /> 
+        <meta name="language" content="br" /> 
+        <meta name="robots" content="follow" />	          
+        <link href="js/jquery/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="css/public/main.css" rel="stylesheet" />
+        <link href="js/jquery/gmap/map.css" rel="stylesheet" />
+		<!--[if lt IE 9]>
+          <script src="http://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="http://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+         <?php include 'header.html'; ?>
+        <div id="map"></div>
+        <div class="">
+            <div id="zoom_controle">
+                <div id="zoom_slider"><img src="js/jquery/gmap/slider_zoom.png" width="44" height="28" /></div>
+                <div id="zoomOut" style="width:30px; cursor:pointer; float:left; height:23px;"></div>
+                <div id="zoomIn" style="width:30px; cursor:pointer; float:left; height:23px; margin-left:240px;"></div>
+                <div id="zoom_slider_1"></div>
+            </div>
+        </div>
+        <script src="js/jquery/jquery-1.8.3.min.js"></script>
+        <script src="js/jquery/bootstrap/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAXQtGJOVNF96nSCbcaqLRrL1El5Gpe4OU"></script>     
+        <script src="js/jquery/gmap/gmaps.js"></script>
+        <script src="js/jquery/gmap/markers.js"></script>
+        <script src="js/jquery/gmap/init.js"></script>
+        <script src="js/jquery/gmap/markerclusterer.js"></script>
+        <script src="js/public/atd.js" type="text/javascript"></script>        
+        <script src="js/public/main.js" type="text/javascript"></script>        
+        <?php include 'footer.html'; ?>
+        <script>
+            mapInit('[init_lat]', '[init_lon]');
+            setTimeout(function () {
+                [panTo]
+                var a = 100;
+            }, 1000);
+
+            $('#panel-busca-mapa form').attr('onSubmit', 'return false');
+            $('#btn-busca-mapa').on('click', function () {
+                var finalidade = $('#finalidade option:selected').val();
+                var tipo = $('#tipo option:selected').val();
+                var dorms = $('#dorms option:selected').val();
+                var cidade = $('#cidade option:selected').val();
+                var bairro = $('#bairro option:selected').val();
+                var valormax = $('#valormax option:selected').val();
+                if (finalidade == 2) {
+                    var valormax = $('.valor_locacao option:selected').val();
+                }
+                var url = baseUri + '/mapa/pontos/';
+                url += 'finalidade/' + finalidade + '/';
+
+                if (tipo >= 1) {
+                    url += 'tipo/' + tipo + '/';
+                }
+                if (dorms >= 1) {
+                    url += 'dorms/' + dorms + '/';
+                }
+                if (cidade >= 1) {
+                    url += 'cidade/' + cidade + '/';
+                }
+                if (bairro >= 1) {
+                    url += 'bairro/' + bairro + '/';
+                }
+                if (valormax >= 1) {
+                    url += 'max/' + valormax + '/';
+                }
+                mymarkers = [];
+                mapReload('[init_lat]', '[init_lon]');
+
+                mcOptions = {styles: [{
+                            height: 53,
+                            url: "images/icons/m1.png",
+                            width: 53
+                        },
+                        {
+                            height: 56,
+                            url: "images/icons/m2.png",
+                            width: 56
+                        },
+                        {
+                            height: 66,
+                            url: "images/icons/m3.png",
+                            width: 66
+                        },
+                        {
+                            height: 78,
+                            url: "images/icons/m4.png",
+                            width: 78
+                        },
+                        {
+                            height: 90,
+                            url: "images/icons/m5.png",
+                            width: 90
+                        }],
+                    maxZoom: 12,
+                    gridSize: 30
+                }
+                $.post(url, {}, function (data) {
+                    if (data != 'null') {
+                        var data = $.parseJSON(data);
+                        $.each(data.rs, function (k, v) {
+                            addMarker(v)
+                        })
+                        setTimeout(function () {
+                            //  markerClusterer = new MarkerClusterer(map.map, mymarkers, mcOptions);
+                        }, 1500)
+                    }
+                })
+
+            });
+            setTimeout(function () {
+                $(function () {
+                    $('.panel-busca-mapa').removeClass('hidden').fadeIn();
+                });
+            }, 1500);
+
+        </script>
+    </body>
+</html>
